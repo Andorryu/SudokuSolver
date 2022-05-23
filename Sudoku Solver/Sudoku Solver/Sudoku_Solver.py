@@ -10,16 +10,26 @@ class Driver():
         self.squareSize = int(math.sqrt(len(self.board)))
 
     def Run(self):
+        # check the board
         self.CheckViableBoard()
+        # print its validity and stop program if invalid
         print("")
         if self.invalid:
             print("This board is INVALID")
+            return
         else:
             print("This board is VALID")
+        # perform initial general analysis
         self.GeneralAnalysis()
-        self.FillInTiles()
-        self.RemainderAnalysis()
-        self.PairAnalysis()
+        # run the analysis techniques until the board is finished
+        for i in range(4):
+            self.FillInTiles()
+            self.GeneralAnalysis()
+            self.RemainderAnalysis()
+            self.PairAnalysis()
+            print("")
+            print("Sudoku board:")
+            self.DisplayBoard()
 
     def CheckViableBoard(self):
         print("Checking Viability of the board by checking if there are repeats in the rows, columns, or 3x3 squares")
@@ -142,13 +152,70 @@ class Driver():
         print(self.possibleNotes)
 
     def FillInTiles(self):
-        pass
+        print("")
+        print("Now filling in tiles...")
+        rowRepeatList = [[] for i in range(len(self.board))]
+        colRepeatList = [[] for i in range(len(self.board))]
+        for row in range(len(self.board)):
+            for col in range(len(self.board)):
+                if self.board[row][col] == 0:
+
+                    # fill in the blank if there is a number that is the only one in its row, column or 3x3 square
+                    # search the row
+                    for note in self.possibleNotes[row][col]:
+                        for i in range(len(self.board) - (col + 1)): # i ranges from 0 to the number of tiles left in the row
+                            testCol = i + col + 1 # testCol ranges from the index of the tile after the testTile to 8
+                            if len(self.possibleNotes[row][testCol]) > 0: # if the test notes are not empty
+                                if not self.ItemExistsInList(note, rowRepeatList[row]):
+                                    if self.ItemExistsInList(note, self.possibleNotes[row][testCol]):
+                                        rowRepeatList[row].append(note)
+                        if not self.ItemExistsInList(note, rowRepeatList[row]):
+                            print("")
+                            print(note, " only exists in the possible list at (", row, ",", col, ") in the row ", row)
+                            self.board[row][col] = note
+                            print("Inserted ", self.board[row][col], " at (", row, ",", col, ")")
+                    # search the column
+                    for note in self.possibleNotes[row][col]:
+                        for i in range(len(self.board) - (row + 1)): # i ranges from 0 to the number of tiles left in the column
+                            testRow = i + row + 1 # testRow ranges from index of the tile after the testTile to 8
+                            if len(self.possibleNotes[testRow][col]) > 0: # if the test notes are not empty
+                                if not self.ItemExistsInList(note, colRepeatList[col]):
+                                    if self.ItemExistsInList(note, self.possibleNotes[testRow][col]):
+                                        colRepeatList[col].append(note)
+                        if not self.ItemExistsInList(note, colRepeatList[col]):
+                            print("")
+                            print(note, " only exists in the possible list at (", row, ",", col, ") in the col ", col)
+                            self.board[row][col] = note
+                            print("Inserted ", self.board[row][col], " at (", row, ",", col, ")")
+                    # search the 3x3 square
+
+
+                    # fill in the blank if there is only one possible number for that blank
+                    if len(self.possibleNotes[row][col]) == 1:
+                        print("")
+                        print(self.possibleNotes[row][col][0], " is the only possible number for the tile at (", row, ",", col, ")")
+                        self.board[row][col] = self.possibleNotes[row][col][0]
+                        print("Inserted ", self.board[row][col], " at (", row, ",", col, ")")
+
+        # update the notes of filled-in tiles
+        for row in range(len(self.board)):
+            for col in range(len(self.board)):
+                if self.board[row][col] != 0:
+                    self.impossibleNotes[row][col] = []
+                    self.possibleNotes[row][col] = []
+
 
     def RemainderAnalysis(self):
         pass
 
     def PairAnalysis(self):
         pass
+
+    def DisplayBoard(self):
+        for row in range(len(self.board)):
+            for col in range(len(self.board)):
+                print(self.board[row][col], end=" ")
+            print("")
 
     def ItemExistsInList(self, item, list):
         for i in list:
@@ -162,6 +229,14 @@ class Driver():
             if not self.ItemExistsInList(i, subtractee):
                 subtraction.append(i)
         return subtraction
+
+    def FindOverlap(self, list1, list2):
+        resultList = []
+        for item1 in list1:
+            for item2 in list2:
+                if item1 == item2:
+                    resultList.append(item1)
+        return resultList
 
 
 
