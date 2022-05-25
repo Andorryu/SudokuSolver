@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>c49cf2c6-8b8f-4103-957d-84c20dea6678</ProjectGuid>
+    <ProjectGuid>f667a82f-fd95-409f-a2a7-3861287c4b35</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Sudoku_Solver.py</StartupFile>
+    <StartupFile>SudokuSolver.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>Sudoku Solver</Name>
-    <RootNamespace>Sudoku Solver</RootNamespace>
+    <Name>SudokuSolver</Name>
+    <RootNamespace>SudokuSolver</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Sudoku_Solver.py" />
+    <Compile Include="SudokuSolver.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
