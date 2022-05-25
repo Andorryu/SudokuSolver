@@ -22,7 +22,7 @@ class Driver():
         # perform initial general analysis
         self.GeneralAnalysis()
         # run the analysis techniques until the board is finished
-        for i in range(4):
+        while self.run:
             self.FillInTiles()
             self.GeneralAnalysis()
             self.RemainderAnalysis()
@@ -30,6 +30,8 @@ class Driver():
             print("")
             print("Sudoku board:")
             self.DisplayBoard()
+            self.CheckSolved()
+            #self.run = False
 
     def CheckViableBoard(self):
         print("Checking Viability of the board by checking if there are repeats in the rows, columns, or 3x3 squares")
@@ -210,6 +212,14 @@ class Driver():
 
     def PairAnalysis(self):
         pass
+
+    def CheckSolved(self):
+        self.run = False
+        for row in range(len(self.board)):
+            for col in range(len(self.board)):
+                if self.board[row][col] == 0:
+                    self.run = True # run until the board is solved
+
 
     def DisplayBoard(self):
         for row in range(len(self.board)):
