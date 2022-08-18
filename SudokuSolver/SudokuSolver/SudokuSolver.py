@@ -1,9 +1,11 @@
 import math
+import copy
+import time
 
 class Driver():
     def __init__(self):
         self.run = True
-        self.previousBoard = [[0 for j in range(9)] for i in range(9)]
+        self.previousBoard = []
         self.board = [[int(j) for j in file.read(9)] for i in range(9)] # of the form:   board[row][col]
         self.impossibleNotes = [[[] for j in range(9)] for i in range(9)]
         self.possibleNotes = [[[] for j in range(9)] for i in range(9)]
@@ -23,13 +25,11 @@ class Driver():
         # perform initial general analysis
         # run the analysis techniques until the board is finished
         while self.run:
+            self.DisplayBoard()
             self.GeneralAnalysis()
             self.RemainderAnalysis()
             self.PairAnalysis()
             self.FillInTiles()
-            print("")
-            print("Sudoku board:")
-            self.DisplayBoard()
             self.CheckSolved()
 
     def CheckViableBoard(self):
@@ -243,14 +243,20 @@ class Driver():
         pass
 
     def CheckSolved(self):
-        self.run = False
-        for row in range(len(self.board)):
-            for col in range(len(self.board)):
-                if self.board[row][col] == 0:
-                    self.run = True
+        self.run = self.previousBoard != self.board
+        self.previousBoard = copy.deepcopy(self.board)
+        if not self.run:
+            print("Time taken:", time.time() - startTime)
+        #self.run = False
+        #for row in range(len(self.board)):
+        #    for col in range(len(self.board)):
+        #        if self.board[row][col] == 0:
+        #            self.run = True
         
 
     def DisplayBoard(self):
+        print("")
+        print("Sudoku board:")
         for row in range(len(self.board)):
             for col in range(len(self.board)):
                 print(self.board[row][col], end=" ")
@@ -285,6 +291,7 @@ file = open("input.txt")
 # seeking start of file (this is technically unnecessary rn)
 file.seek(0, 0)
 
+startTime = time.time()
 driver = Driver()
 driver.Run()
 
